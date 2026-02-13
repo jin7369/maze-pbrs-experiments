@@ -9,15 +9,17 @@ Maze 환경에서 Potential-Based Reward Shaping(PBRS)을 비교한 강화학습
 
 ## Current Status
 
-- 미로 생성, PBRS(ICML-style), 재방문 종료/임계치 종료, REINFORCE 실험까지 1차 구현 및 실행 완료
-- 주요 실험 결과는 `outputs/`, 문서는 `reports/`, 요약 인덱스는 `experiments_log_index.md`에 정리
-- GitHub 공개 리포지토리(`main`)에 기본 문서/코드 업로드 완료
+- 미로 생성, PBRS(ICML-style), 재방문 종료/임계치 종료, REINFORCE 실험까지 1차 구현/실행 완료
+- 주요 결과는 `outputs/`, 문서는 `reports/`, 요약 인덱스는 `experiments_log_index.md`에 정리
+- GitHub 공개 리포지토리(`main`) 업로드 완료
 
 ## Current Issues
 
 - 일부 설정에서 PBRS가 평균 종료 step은 바꾸지만 validation success 개선으로 이어지지 않음
-- 종료 규칙(특히 재방문 기반)이 조기 종료 전략을 강화할 가능성이 있어 보상 설계와 상호작용 분석이 필요
-- 실험별 결과 비교 기준(동일한 eval 조건, seed 세트, 종료 규칙) 표준화를 추가로 정리할 필요가 있음`r`n`r`n## Project Structure
+- 재방문 기반 종료 규칙이 조기 종료 전략을 강화할 가능성이 있어 보상 설계와 상호작용 분석이 필요
+- 실험 간 공정 비교를 위해 eval 조건/seed/종료 규칙 표준화를 추가 정리할 필요가 있음
+
+## Project Structure
 
 ```text
 .
@@ -90,5 +92,3 @@ python reinforce_memory_env/experiments/run_reinforce_memory_experiment.py
 ## Reference
 
 - Ng, Harada, Russell (1999), *Policy Invariance under Reward Transformations*
-
-

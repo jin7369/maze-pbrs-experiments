@@ -1,33 +1,33 @@
 ﻿# Experiment Log Index
-?꾨옒???꾩옱 ?앹꽦???ㅽ뿕 濡쒓렇 移댄깉濡쒓렇?낅땲??
+
+아래는 현재 정리된 실험 로그 목록입니다.
 
 ## Logs
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_icml_style_v1/experiment_log.md`
-: BFS potential 湲곕컲 ICML-style 3議곌굔 鍮꾧탳 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_icml_style_manhattan_v1/experiment_log.md`
-: Manhattan potential 湲곕컲 ICML-style 3議곌굔 鍮꾧탳 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_noslip_v1/experiment_log.md`
-: no-slip ?섍꼍?먯꽌 BFS/Manhattan 鍮꾧탳 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_pbrs_manhattan_v2/experiment_log.md`
-: `gamma=0.99`, `step=0`, `goal=1` Manhattan PBRS 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_pbrs_manhattan_explore_v1/experiment_log.md`
-: first-visit exploration bonus 異붽? 踰꾩쟾 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_pbrs_manhattan_explore_potential_v1/experiment_log.md`
-: potential-based exploration 蹂댁긽(`Psi`) 踰꾩쟾 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reinforce_memory_env/reports/reinforce_memory_v1/experiment_log.md`
-: REINFORCE + visited-table state ?몄퐫???ㅽ뿕 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_setup_notes/experiment_log.md`
-: ?ㅽ뿕 ?ㅼ젙 臾몄꽌(setup notes) 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_revisit_termination_manhattan_v1/experiment_log.md`
-: ?щ갑臾?利됱떆 醫낅즺 洹쒖튃 + Manhattan PBRS ?ㅽ뿕 濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_revisit_termination_manhattan_v2_longtrain/experiment_log.md`
-: ?щ갑臾?醫낅즺 洹쒖튃 ?좎? + ?κ린 ?숈뒿(5000 episodes) 寃利?濡쒓렇.
-- `?좉퇋_?ㅽ뿕_workspace/reports/maze_shaping_revisit_termination_manhattan_v3_verylong/experiment_log.md`
-: ?щ갑臾?醫낅즺 洹쒖튃 ?좎? + 珥덉옣湲??숈뒿(20000 episodes) 寃利?濡쒓렇.
+- `reports/maze_shaping_icml_style_v1/experiment_log.md`
+  - BFS potential 기반 ICML-style 3조건 비교 로그
+- `reports/maze_shaping_icml_style_manhattan_v1/experiment_log.md`
+  - Manhattan potential 기반 ICML-style 3조건 비교 로그
+- `reports/maze_shaping_noslip_v1/experiment_log.md`
+  - no-slip 환경에서 BFS/Manhattan 비교 로그
+- `reports/maze_shaping_pbrs_manhattan_v2/experiment_log.md`
+  - `gamma=0.99`, `step=0`, `goal=1` 설정의 Manhattan PBRS 로그
+- `reports/maze_shaping_pbrs_manhattan_explore_v1/experiment_log.md`
+  - first-visit exploration bonus 추가 버전 로그
+- `reports/maze_shaping_pbrs_manhattan_explore_potential_v1/experiment_log.md`
+  - exploration을 potential 기반으로 준 버전 로그
+- `reports/maze_shaping_revisit_termination_manhattan_v1/experiment_log.md`
+  - 재방문 즉시 종료 + Manhattan PBRS 로그
+- `reports/maze_shaping_revisit_termination_manhattan_v2_longtrain/experiment_log.md`
+  - 재방문 종료 규칙 + 장기 학습(5000 episodes) 로그
+- `reports/maze_shaping_revisit_termination_manhattan_v3_verylong/experiment_log.md`
+  - 재방문 종료 규칙 + 초장기 학습(20000 episodes) 로그
+- `reports/maze_shaping_revisit_penalty_threshold_manhattan_v1/experiment_log.md`
+  - 재방문 패널티 + 임계치 종료(`revisit_terminate_count=3`) Manhattan PBRS 로그
+- `reports/maze_shaping_setup_notes/experiment_log.md`
+  - 실험 설정 설명 문서 로그
+- `reinforce_memory_env/reports/reinforce_memory_v1/experiment_log.md`
+  - REINFORCE + visited-table state encoding 실험 로그
 
-- `신규_실험_workspace/reports/maze_shaping_revisit_penalty_threshold_manhattan_v1/experiment_log.md`
-: 재방문 패널티+임계치 종료(`revisit_terminate_count=3`) Manhattan PBRS 실험 로그.
 ## Notes
-- 媛?濡쒓렇???숈씪 ?쒗뵆由?`Frontmatter`~`Questions to resolve`)???ъ슜?⑸땲??
-- ?곸꽭 ?섏튂/媛???댁긽 ?꾩긽/?꾩냽 ?≪뀡? 媛?`experiment_log.md`??湲곕줉?섏뼱 ?덉뒿?덈떎.
-
+- 로그 템플릿은 `Frontmatter` ~ `Questions to resolve` 구조를 따릅니다.
+- 상세 수치/해석/이상 징후는 각 실험 폴더의 `experiment_log.md`를 확인하세요.
