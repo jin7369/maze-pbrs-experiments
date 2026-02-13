@@ -1,0 +1,16 @@
+condition,episode,mean_success_rate,std_success_rate,mean_val_steps,std_val_steps
+no_shaping,1,0.0,0.0,350.0,0.0
+no_shaping,5,0.0,0.0,350.0,0.0
+no_shaping,10,0.0,0.0,350.0,0.0
+no_shaping,15,0.0,0.0,350.0,0.0
+no_shaping,20,0.0,0.0,350.0,0.0
+phi_half,1,0.0,0.0,350.0,0.0
+phi_half,5,0.0,0.0,350.0,0.0
+phi_half,10,0.0,0.0,350.0,0.0
+phi_half,15,0.0,0.0,350.0,0.0
+phi_half,20,0.0,0.0,350.0,0.0
+phi_full,1,0.0,0.0,350.0,0.0
+phi_full,5,0.0,0.0,350.0,0.0
+phi_full,10,0.0,0.0,350.0,0.0
+phi_full,15,0.0,0.0,350.0,0.0
+phi_full,20,0.0,0.0,350.0,0.0

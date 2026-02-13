@@ -1,0 +1,131 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\title{Maze Shaping Experiment: Configuration Notes}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+This document records the exact experiment settings used in \texttt{run\_maze\_shaping\_experiment.py}, so the run logic is explicit and reproducible.
+
+\section{Environment (Maze MDP)}
+\textbf{State space.} Grid coordinates $(r,c)$ over a binary maze map.
+
+\textbf{Action space.} Four cardinal actions:
+\[
+\mathcal{A}=\{\text{up},\text{down},\text{left},\text{right}\}.
+\]
+
+\textbf{Start/goal.}
+\begin{itemize}
+\item Start: $(1,1)$
+\item Goal: $(h-2,w-2)$ where $(h,w)$ is maze size
+\end{itemize}
+
+\textbf{Transition stochasticity.}
+With probability $0.2$, intended action is replaced by a random action (slip).
+
+\textbf{Collision handling.}
+If next cell is wall or out-of-bounds, the agent stays in place.
+
+\textbf{Base reward and termination.}
+\begin{itemize}
+\item Step reward: $R(s,a,s')=-1$
+\item Episode ends when goal is reached, or after \texttt{max\_steps}
+\end{itemize}
+
+\section{Shaping Formulation}
+For potential scale $\kappa\in\{0,0.5,1.0\}$, define
+\[
+\Phi_\kappa(s)=\kappa\Phi_0(s),
+\]
+and shaped reward
+\[
+R'_\kappa(s,a,s')=R(s,a,s')+\gamma\Phi_\kappa(s')-\Phi_\kappa(s).
+\]
+
+\textbf{Conditions.}
+\begin{itemize}
+\item \texttt{no\_shaping}: $\kappa=0$
+\item \texttt{phi\_half}: $\kappa=0.5$
+\item \texttt{phi\_full}: $\kappa=1.0$
+\end{itemize}
+
+\textbf{Potential distance type.}
+\begin{itemize}
+\item \texttt{bfs}: $\Phi_0(s)=-d_{\mathrm{BFS}}(s,g)$ (wall-aware shortest path)
+\item \texttt{manhattan}: $\Phi_0(s)=-(|r-r_g|+|c-c_g|)$ (wall-agnostic)
+\end{itemize}
+
+\section{Learning Algorithm (Tabular SARSA)}
+\textbf{Behavior policy.} $\epsilon$-greedy with tie-randomization.
+
+\textbf{Update rule (non-terminal):}
+\[
+Q(s,a)\leftarrow Q(s,a)+\alpha\Bigl(r'+\gamma Q(s',a')-Q(s,a)\Bigr).
+\]
+
+\textbf{Terminal update:}
+\[
+Q(s,a)\leftarrow Q(s,a)+\alpha\Bigl(r'-Q(s,a)\Bigr).
+\]
+
+\textbf{Q-table shape.} $(h,w,4)$.
+
+\section{Validation Protocol}
+Validation is run during training every \texttt{validation\_interval} episodes.
+
+\begin{itemize}
+\item Policy for validation: greedy ($\arg\max_a Q(s,a)$)
+\item Validation rollouts per checkpoint: \texttt{validation\_episodes}
+\item Metrics:
+  \begin{itemize}
+  \item success rate
+  \item average steps-to-goal
+  \end{itemize}
+\end{itemize}
+
+\section{Run Aggregation and Outputs}
+For each condition, training runs are repeated with different seeds and aggregated.
+
+\textbf{Saved artifacts per run directory:}
+\begin{itemize}
+\item \texttt{learning\_curve.csv}, \texttt{learning\_curve.png}
+\item \texttt{validation\_progress.csv}, \texttt{validation\_progress.png}
+\item \texttt{run\_summary.json}
+\item \texttt{gifs/policy\_rollout\_ep\_*.gif} at 0\%, 25\%, 50\%, 75\%, 100\%
+\end{itemize}
+
+\section{Default CLI Configuration}
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+Argument & Default \\
+\midrule
+\texttt{--maze-path} & \texttt{.../maze\_00.npy} \\
+\texttt{--episodes} & 500 \\
+\texttt{--runs} & 12 \\
+\texttt{--alpha} & 0.02 \\
+\texttt{--epsilon} & 0.10 \\
+\texttt{--gamma} & 1.0 \\
+\texttt{--max-steps} & 350 \\
+\texttt{--validation-interval} & 25 \\
+\texttt{--validation-episodes} & 30 \\
+\texttt{--seed} & 7 \\
+\texttt{--potential-distance} & \texttt{bfs} \\
+\bottomrule
+\end{tabular}
+\caption{Default settings in the experiment script.}
+\end{table}
+
+\section{Notes}
+Potential-based shaping is policy-invariant in theory (Ng et al., 1999), but finite-sample learning behavior can still differ substantially depending on how informative $\Phi$ is for the maze topology.
+
+\end{document}

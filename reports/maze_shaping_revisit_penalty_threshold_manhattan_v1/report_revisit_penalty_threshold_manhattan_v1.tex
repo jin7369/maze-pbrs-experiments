@@ -1,0 +1,85 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report: Revisit-Penalty Threshold with Manhattan PBRS (v1)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Setup}
+This experiment relaxes immediate revisit termination by allowing limited revisits and terminating only when revisit count in the same episode reaches a threshold.
+
+Core settings:
+\begin{itemize}
+\item Maze: \texttt{../../outputs/maze\_samples\_v1/grids/maze\_00.npy}
+\item Termination: goal reached or revisit count reaches \texttt{revisit\_terminate\_count=3}
+\item Episodes: 5000, Runs: 12
+\item Validation: every 25 episodes (plus episode 1), 30 rollouts
+\item Learning: tabular SARSA, $\alpha=0.02$, $\epsilon=0.10$, $\gamma=0.99$
+\end{itemize}
+
+\section{Reward Design}
+Base reward and penalty:
+\[
+R(s,a,s') =
+\begin{cases}
+1.0 & \text{if } s' \text{ is goal}\\
+-0.05 & \text{if } s' \text{ is revisit}\\
+0.0 & \text{otherwise}
+\end{cases}
+\]
+Potential-based shaping (Manhattan):
+\[
+R'_k = R + \gamma \Phi_k(s') - \Phi_k(s),\quad
+\Phi(s)=-(|r-r_g|+|c-c_g|),\quad
+\Phi_k(s)=k\Phi(s),\ k\in\{0,0.5,1.0\}.
+\]
+
+\section{Curves}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{../../outputs/maze_shaping_revisit_penalty_threshold_manhattan_v1/learning_curve.png}
+\caption{Training curve (steps to termination).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_revisit_penalty_threshold_manhattan_v1/validation_progress.png}
+\caption{Validation success rate and validation mean steps.}
+\end{figure}
+
+\section{Final Metrics}
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Condition & Train mean steps (ep5000) & Val success (ep5000) & Val mean steps (ep5000) \\
+\midrule
+\texttt{no\_shaping} & 25.166666666666668 & 0.0 & 47.583333333333336 \\
+\texttt{phi\_half} & 13.166666666666666 & 0.0 & 15.333333333333334 \\
+\texttt{phi\_full} & 11.333333333333334 & 0.0 & 11.5 \\
+\bottomrule
+\end{tabular}
+\caption{Episode-5000 summary.}
+\end{table}
+
+Best observed validation success:
+\begin{itemize}
+\item \texttt{no\_shaping}: 0.4166666666666667 at episode 4850
+\item \texttt{phi\_half}: 0.0
+\item \texttt{phi\_full}: 0.0
+\end{itemize}
+
+\section{Interpretation}
+The thresholded revisit termination changes trajectory length dynamics, but under current parameters it still does not produce stable goal-reaching behavior in Manhattan PBRS conditions. The metric split (lower termination steps without success gains) suggests optimization toward early termination patterns rather than successful navigation.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output root: \texttt{../../outputs/maze\_shaping\_revisit\_penalty\_threshold\_manhattan\_v1}
+\item Files: \texttt{learning\_curve.csv/png}, \texttt{validation\_progress.csv/png}, \texttt{run\_summary.json}
+\end{itemize}
+
+\end{document}

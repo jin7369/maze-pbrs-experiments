@@ -1,0 +1,145 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{float}
+
+\title{Maze Reward Shaping Experiment Report \\
+(ICML 1999 Style Conditions)}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Objective}
+This report summarizes a maze-navigation reinforcement learning experiment inspired by Ng, Harada, and Russell (ICML 1999), comparing three reward settings:
+\begin{itemize}
+\item \texttt{no\_shaping}
+\item \texttt{phi\_half} (potential scale 0.5)
+\item \texttt{phi\_full} (potential scale 1.0)
+\end{itemize}
+
+Let the base reward be $R(s,a,s')=-1$ per step and let $\Phi_0(s)$ be the distance-based potential
+\[
+\Phi_0(s) = -d(s,g),
+\]
+where $d(s,g)$ is the shortest-path distance from state $s$ to goal $g$ on the maze graph (computed by BFS).
+
+For a scale factor $\kappa \in \{0,0.5,1.0\}$, define
+\[
+\Phi_\kappa(s)=\kappa\,\Phi_0(s),
+\]
+and the shaped reward
+\[
+R_\kappa'(s,a,s') = R(s,a,s') + \gamma \Phi_\kappa(s') - \Phi_\kappa(s).
+\]
+In this experiment, $\gamma=1.0$, so each condition becomes:
+\[
+\texttt{no\_shaping}:~\kappa=0,\quad R_0'(s,a,s') = R(s,a,s')=-1,
+\]
+\[
+\texttt{phi\_half}:~\kappa=0.5,\quad R_{0.5}'(s,a,s') = -1 + \Phi_{0.5}(s')-\Phi_{0.5}(s),
+\]
+\[
+\texttt{phi\_full}:~\kappa=1.0,\quad R_{1.0}'(s,a,s') = -1 + \Phi_{1.0}(s')-\Phi_{1.0}(s).
+\]
+
+\section{Setup}
+\begin{itemize}
+\item Environment: generated maze grid \texttt{../../outputs/maze\_samples\_v1/grids/maze\_00.npy}
+\item Agent: tabular SARSA with $\epsilon$-greedy behavior policy
+\item Transition stochasticity: slip probability $0.2$
+\item Base reward: $-1$ per step
+\item Potential shaping: $R'(s,a,s') = R(s,a,s') + \gamma\Phi(s') - \Phi(s)$
+\item Episodes: 500, Runs per condition: 12
+\item Learning rate $\alpha=0.02$, exploration $\epsilon=0.10$, discount $\gamma=1.0$
+\item Max steps per episode: 350
+\item Validation: every 25 episodes, 30 greedy rollout episodes
+\end{itemize}
+
+\section{Used Maze Instance}
+The experiment used one fixed maze instance (\texttt{maze\_00}) from the generated sample set.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+Field & Value \\
+\midrule
+Maze ID & \texttt{maze\_00} \\
+Seed & 0 \\
+Cell size & $10 \times 10$ \\
+Grid size & $21 \times 21$ \\
+Start / Goal & $(1,1)$ / $(19,19)$ \\
+Shortest path length (BFS) & 44 \\
+Wall count / ratio & 242 / 0.5488 \\
+Dead-end count & 13 \\
+\bottomrule
+\end{tabular}
+\caption{Metadata of the maze used in this run.}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.42\textwidth]{../../outputs/maze_samples_v1/images/maze_00.png}
+  \caption{Maze instance \texttt{maze\_00}: start and goal layout used in training and validation.}
+\end{figure}
+
+\section{Quantitative Results}
+\subsection{Training Curve}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{../../outputs/maze_shaping_icml_style_v1/learning_curve.png}
+  \caption{Training steps-to-goal over episodes (mean with std band).}
+\end{figure}
+
+\subsection{Validation Progress}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{../../outputs/maze_shaping_icml_style_v1/validation_progress.png}
+  \caption{Validation success rate and validation average steps over training progress.}
+\end{figure}
+
+\subsection{Final Episode Summary (Episode 500)}
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Condition & Train mean steps & Validation success rate & Validation mean steps \\
+\midrule
+\texttt{no\_shaping} & 350.00 & 0.0000 & 350.00 \\
+\texttt{phi\_half} & 268.42 & 0.0056 & 349.12 \\
+\texttt{phi\_full} & 99.25 & 0.6306 & 229.26 \\
+\bottomrule
+\end{tabular}
+\caption{Performance comparison at the final episode.}
+\end{table}
+
+\section{Qualitative Policy Snapshots (GIF)}
+Five rollout GIFs were exported at policy checkpoints:
+\begin{itemize}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/gifs/policy\_rollout\_ep\_0000.gif}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/gifs/policy\_rollout\_ep\_0125.gif}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/gifs/policy\_rollout\_ep\_0250.gif}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/gifs/policy\_rollout\_ep\_0375.gif}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/gifs/policy\_rollout\_ep\_0500.gif}
+\end{itemize}
+
+\section{Discussion}
+\begin{itemize}
+\item \texttt{phi\_full} consistently outperformed the other settings in this maze instance.
+\item \texttt{no\_shaping} did not learn a successful strategy under the current budget and stochasticity.
+\item \texttt{phi\_half} improved training steps somewhat but did not yield strong greedy validation success in this run.
+\end{itemize}
+
+\section{Reproducibility Artifacts}
+Primary output files:
+\begin{itemize}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/learning\_curve.csv}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/validation\_progress.csv}
+\item \texttt{../outputs/maze\_shaping\_icml\_style\_v1/run\_summary.json}
+\end{itemize}
+
+\end{document}

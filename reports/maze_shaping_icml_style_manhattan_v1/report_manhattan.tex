@@ -1,0 +1,168 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{amsmath}
+
+\title{Maze Reward Shaping Report (Manhattan Potential)\\
+Argumentative Rewrite}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Research Objective}
+\textbf{Why this section matters.} A clear research question is necessary to interpret the same curves as either ``theory-consistent'' or ``implementation-specific'' behavior.
+
+This report asks: \emph{In a stochastic maze domain, how much practical learning benefit do potential-based shaping rewards provide under finite training, and how does that benefit change when the potential is based on Manhattan distance?}
+
+We compare three conditions exactly as in the ICML-style setup:
+\begin{itemize}
+\item \texttt{no\_shaping}
+\item \texttt{phi\_half} ($\kappa=0.5$)
+\item \texttt{phi\_full} ($\kappa=1.0$)
+\end{itemize}
+
+\section{Theoretical Motivation (Ng et al., 1999)}
+\textbf{Why this section matters.} The experiment is only meaningful if we separate \emph{policy invariance in theory} from \emph{learning speed in practice}.
+
+Ng et al. (1999) show that shaping of the form
+\[
+F(s,a,s') = \gamma\Phi(s') - \Phi(s)
+\]
+is policy-invariant (under their assumptions), meaning the set of optimal policies is unchanged after reward transformation. This motivates our design: we intentionally use potential-based shaping so that any difference across conditions should primarily reflect optimization dynamics (sample efficiency, exploration guidance), not a different task objective.
+
+In this experiment, base reward is $R(s,a,s')=-1$ per step and shaped reward is
+\[
+R'_{\kappa}(s,a,s') = R(s,a,s') + \gamma\Phi_{\kappa}(s') - \Phi_{\kappa}(s),
+\]
+with
+\[
+\Phi_{\kappa}(s)=\kappa\Phi_0(s),\quad \kappa\in\{0,0.5,1.0\},\quad \gamma=1.0.
+\]
+For this Manhattan version,
+\[
+\Phi_0(s) = -\left(|r-r_g|+|c-c_g|\right),
+\]
+where $(r_g,c_g)$ is the goal coordinate.
+
+\section{Experimental Design}
+\textbf{Why this section matters.} Design choices determine whether observed improvements answer the research question or are artifacts.
+
+Design choices were tied directly to the question above:
+\begin{itemize}
+\item \textbf{Same environment, same algorithm, same hyperparameters across conditions:} isolates the effect of shaping magnitude $\kappa$.
+\item \textbf{Three shaping scales $(0,0.5,1.0)$:} tests whether stronger potential gradients produce stronger optimization bias.
+\item \textbf{Stochastic transitions (slip probability $0.2$):} stresses robustness, making exploration quality measurable.
+\item \textbf{Repeated runs (12 seeds):} reduces single-seed variance and supports condition-level comparison.
+\item \textbf{Validation every 25 episodes (30 greedy rollouts):} tracks whether training improvements transfer to greedy policy quality.
+\end{itemize}
+
+Fixed settings: SARSA (tabular), $\alpha=0.02$, $\epsilon=0.10$, $\gamma=1.0$, 500 episodes, max 350 steps per episode.
+
+\section{Used Maze Instance}
+\textbf{Why this section matters.} Maze geometry controls whether Manhattan potential is aligned or misaligned with true progress, directly affecting the research question.
+
+The experiment used one fixed maze instance, \texttt{maze\_00}:
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+Field & Value \\
+\midrule
+Maze ID & \texttt{maze\_00} \\
+Seed & 0 \\
+Cell size & $10\times 10$ \\
+Grid size & $21\times 21$ \\
+Start / Goal & $(1,1)$ / $(19,19)$ \\
+Shortest path length (BFS) & 44 \\
+Wall count / ratio & 242 / 0.5488 \\
+Dead-end count & 13 \\
+\bottomrule
+\end{tabular}
+\caption{Metadata of the maze used in this Manhattan-potential run.}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.42\textwidth]{../../outputs/maze_samples_v1/images/maze_00.png}
+  \caption{Maze instance \texttt{maze\_00}.}
+\end{figure}
+
+\section{Results}
+\textbf{Why this section matters.} This section quantifies whether potential scaling changes learning outcomes under finite data.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{../../outputs/maze_shaping_icml_style_manhattan_v1/learning_curve.png}
+  \caption{Training steps-to-goal (mean with std band).}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{../../outputs/maze_shaping_icml_style_manhattan_v1/validation_progress.png}
+  \caption{Validation success and validation average steps over training.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Condition & Train mean steps (ep 500) & Validation success (ep 500) & Validation mean steps (ep 500) \\
+\midrule
+\texttt{no\_shaping} & 350.00 & 0.0000 & 350.00 \\
+\texttt{phi\_half} & 316.58 & 0.0000 & 350.00 \\
+\texttt{phi\_full} & 242.67 & 0.0472 & 345.08 \\
+\bottomrule
+\end{tabular}
+\caption{Final-episode summary for Manhattan potential.}
+\end{table}
+
+Additional observation: peak validation success for \texttt{phi\_full} was 0.0861, while \texttt{no\_shaping} and \texttt{phi\_half} stayed at 0.
+
+\section{Discussion: Mechanism-Level Interpretation}
+\textbf{Why this section matters.} Summary statistics alone do not explain \emph{why} Manhattan shaping underperformed BFS shaping in the same maze.
+
+\textbf{Mechanism 1: gradient alignment with true geodesic progress.}
+Manhattan distance ignores walls. In corridors and detours, moves that reduce Manhattan distance can be locally attractive but globally unhelpful. Therefore the shaping term can provide weak or misleading short-horizon guidance compared to BFS-based potential, which is aligned with maze topology.
+
+\textbf{Mechanism 2: magnitude vs direction trade-off.}
+Comparing \texttt{phi\_half} and \texttt{phi\_full}, stronger shaping ($\kappa=1.0$) produced better training metrics, suggesting that signal strength helps. However, the low validation success indicates that stronger but misaligned guidance does not reliably produce robust goal-reaching greedy policies.
+
+\textbf{Mechanism 3: finite-sample regime vs asymptotic invariance.}
+Potential-based shaping is theoretically policy-invariant, but our experiment is finite-horizon training with stochastic transitions and nonzero exploration. In this regime, invariance does not guarantee equal sample efficiency. The observed gap is therefore compatible with Ng et al.: objective-equivalence can hold while optimization behavior differs substantially.
+
+\textbf{Mechanism 4: validation gap as a diagnostic.}
+The large train/validation mismatch for Manhattan shaping suggests policies that partially exploit shaped reward structure without consistently solving the maze under greedy execution.
+
+\section{Qualitative Policy Snapshots (GIF)}
+\textbf{Why this section matters.} Rollout movies help verify whether numerical trends correspond to qualitatively better navigation.
+
+Five checkpoint GIFs:
+\begin{itemize}
+\item \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/gifs/policy\_rollout\_ep\_0000.gif}
+\item \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/gifs/policy\_rollout\_ep\_0125.gif}
+\item \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/gifs/policy\_rollout\_ep\_0250.gif}
+\item \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/gifs/policy\_rollout\_ep\_0375.gif}
+\item \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/gifs/policy\_rollout\_ep\_0500.gif}
+\end{itemize}
+
+\section{Reproducibility Artifacts}
+\textbf{Why this section matters.} Explicit artifact paths enable exact reruns and auditing.
+
+\begin{itemize}
+\item Script: \texttt{../../experiments/maze\_shaping\_icml\_style/run\_maze\_shaping\_experiment.py}
+\item Learning CSV: \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/learning\_curve.csv}
+\item Validation CSV: \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/validation\_progress.csv}
+\item Run config summary: \texttt{../../outputs/maze\_shaping\_icml\_style\_manhattan\_v1/run\_summary.json}
+\end{itemize}
+
+\section{Conclusion}
+\textbf{Why this section matters.} The conclusion maps evidence back to the original research question.
+
+In this maze and training budget, Manhattan-based potential shaping improved training efficiency over no shaping, but the gain was limited and did not translate into strong validation success. This supports the view that potential-based shaping can preserve objective structure while still being highly sensitive to the \emph{choice of potential} for practical learning speed.
+
+\end{document}

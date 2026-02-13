@@ -1,0 +1,80 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report: PBRS Manhattan (v2)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Experiment Setup}
+This report documents the run with the following settings:
+\begin{itemize}
+\item Potential type: Manhattan distance PBRS
+\item Discount factor: $\gamma=0.99$
+\item Base step reward: $0.0$
+\item Goal reward: $+1.0$ on terminal transition
+\item Conditions: \texttt{no\_shaping}, \texttt{phi\_half}, \texttt{phi\_full}
+\item Episodes: 500, Runs: 12
+\item Validation every 25 episodes, 30 greedy rollouts
+\end{itemize}
+
+Reward used for shaping:
+\[
+R'_{\kappa}(s,a,s') = R(s,a,s') + \gamma\Phi_{\kappa}(s') - \Phi_{\kappa}(s), \quad \kappa\in\{0,0.5,1.0\}.
+\]
+
+Here, $\Phi(s)$ is the potential value of state $s$. In this report we use Manhattan potential:
+\[
+\Phi(s)=-(|r-r_g|+|c-c_g|),
+\]
+where $(r,c)$ is the agent state and $(r_g,c_g)$ is the goal coordinate.  
+Each condition scales this base potential as
+\[
+\Phi_{\kappa}(s)=\kappa\,\Phi(s),
+\]
+so $\kappa=0$ is no shaping, $\kappa=0.5$ is half-strength shaping, and $\kappa=1.0$ is full-strength shaping.
+
+\section{Results}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../../outputs/maze_shaping_icml_style_pbrs_manhattan_v2/learning_curve.png}
+\caption{Training curve (steps to goal).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_icml_style_pbrs_manhattan_v2/validation_progress.png}
+\caption{Validation progress (success rate and average steps).}
+\end{figure}
+
+\section{Final Episode Summary (Episode 500)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Condition & Validation success rate & Validation mean steps \\
+\midrule
+\texttt{no\_shaping} & 0.0 & 350.0 \\
+\texttt{phi\_half} & 0.0 & 350.0 \\
+\texttt{phi\_full} & 0.0 & 350.0 \\
+\bottomrule
+\end{tabular}
+\caption{All conditions remained unsuccessful in this run budget.}
+\end{table}
+
+\section{Interpretation}
+Under this specific configuration, none of the three conditions reached successful greedy validation behavior within 500 episodes. The run is still useful as a record of a negative result for this reward design.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output folder: \texttt{../../outputs/maze\_shaping\_icml\_style\_pbrs\_manhattan\_v2}
+\item Learning CSV: \texttt{learning\_curve.csv}
+\item Validation CSV: \texttt{validation\_progress.csv}
+\item Run summary: \texttt{run\_summary.json}
+\item GIFs: \texttt{gifs/policy\_rollout\_ep\_*.gif}
+\end{itemize}
+
+\end{document}

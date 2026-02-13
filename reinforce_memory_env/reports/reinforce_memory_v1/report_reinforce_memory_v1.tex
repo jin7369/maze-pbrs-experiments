@@ -1,0 +1,70 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{REINFORCE Memory Experiment Report (v1)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Objective}
+This experiment evaluates whether a network-based policy gradient method (REINFORCE) can learn maze navigation when the observation explicitly includes memory of visited locations.
+
+\section{Method}
+\textbf{Policy model.} Two-layer MLP policy trained with REINFORCE.
+
+\textbf{State encoding.}
+\[
+x_t = [\text{onehot}(s_t)\, ;\, \text{visited\_table}_t],
+\]
+where \texttt{visited\_table} is flattened binary memory indicating visited cells in the current episode.
+
+\textbf{Environment/reward.}
+Step reward $=-0.01$, terminal goal reward $=+1.0$, deterministic transition (no slip), max steps $=350$.
+
+\textbf{Hyperparameters.}
+Episodes $=800$, runs $=8$, hidden dim $=64$, learning rate $=0.002$, $\gamma=0.99$, entropy coefficient $=0.001$.
+
+\section{Results}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{../../outputs/reinforce_memory_v1/learning_curve.png}
+\caption{Training curve: mean steps to goal over episodes.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/reinforce_memory_v1/validation_progress.png}
+\caption{Validation success rate and validation average steps.}
+\end{figure}
+
+\section{Final Metrics}
+\begin{table}[h]
+\centering
+\begin{tabular}{lc}
+\toprule
+Metric & Value \\
+\midrule
+Final train mean steps (ep 800) & 350.0 \\
+Final validation success rate (ep 800) & 0.0 \\
+Final validation mean steps (ep 800) & 350.0 \\
+Best validation success rate (all checkpoints) & 0.0 \\
+\bottomrule
+\end{tabular}
+\caption{Summary of REINFORCE memory experiment outcome.}
+\end{table}
+
+\section{Interpretation}
+Under the tested configuration, the agent did not learn a successful policy. This run is recorded as a negative result and indicates that the current reward scale / optimization setting is insufficient despite memory-augmented state encoding.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output directory: \texttt{../outputs/reinforce\_memory\_v1}
+\item Curves: \texttt{learning\_curve.csv/png}, \texttt{validation\_progress.csv/png}
+\item Run config: \texttt{run\_summary.json}
+\item Rollout GIFs: \texttt{gifs/policy\_rollout\_ep\_*.gif}
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,76 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report: Manhattan PBRS + Potential-Based Exploration (v1)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Experiment Setup}
+This run uses Manhattan PBRS and replaces the previous first-visit exploration bonus with a potential-based exploration term.
+
+\textbf{Reward used in training:}
+\[
+r_t = r_{\text{env}}(s_t,a_t,s_{t+1}) + \gamma\Phi_\kappa(s_{t+1}) - \Phi_\kappa(s_t) + \beta\left(\gamma\Psi(s_{t+1})-\Psi(s_t)\right).
+\]
+
+Definitions:
+\begin{itemize}
+\item Manhattan potential: $\Phi(s)=-(|r-r_g|+|c-c_g|)$, $\Phi_\kappa(s)=\kappa\Phi(s),\ \kappa\in\{0,0.5,1.0\}$
+\item Exploration potential: $\Psi(s)=-N(s)$, where $N(s)$ is in-episode visit count
+\item Exploration coefficient: $\beta=0.05$
+\item Discount factor: $\gamma=0.99$
+\end{itemize}
+
+Other settings: episodes $=500$, runs $=12$, $\alpha=0.02$, $\epsilon=0.10$, step reward $=0.0$, goal reward $=1.0$, max steps $=350$.
+
+\section{Learning and Validation Curves}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{../../outputs/maze_shaping_icml_style_pbrs_manhattan_explore_potential_v1/learning_curve.png}
+\caption{Training curve (mean steps to goal).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_icml_style_pbrs_manhattan_explore_potential_v1/validation_progress.png}
+\caption{Validation success and validation average steps.}
+\end{figure}
+
+\section{Final Summary (Episode 500)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Condition & Train mean steps & Validation success rate & Validation mean steps \\
+\midrule
+\texttt{no\_shaping} & 299.42 & 0.1667 & 299.0 \\
+\texttt{phi\_half} & 350.00 & 0.0000 & 350.0 \\
+\texttt{phi\_full} & 350.00 & 0.0000 & 350.0 \\
+\bottomrule
+\end{tabular}
+\caption{Episode-500 metrics for potential-based exploration run.}
+\end{table}
+
+Best validation success over training:
+\begin{itemize}
+\item \texttt{no\_shaping}: 0.1667
+\item \texttt{phi\_half}: 0.0000
+\item \texttt{phi\_full}: 0.0000
+\end{itemize}
+
+\section{Interpretation}
+Under this configuration, adding potential-based exploration did not improve Manhattan PBRS conditions. The run is recorded as a negative result for this shaping design and coefficient scale.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output folder: \texttt{../../outputs/maze\_shaping\_icml\_style\_pbrs\_manhattan\_explore\_potential\_v1}
+\item CSVs: \texttt{learning\_curve.csv}, \texttt{validation\_progress.csv}
+\item Config dump: \texttt{run\_summary.json}
+\item GIF rollouts: \texttt{gifs/policy\_rollout\_ep\_*.gif}
+\end{itemize}
+
+\end{document}

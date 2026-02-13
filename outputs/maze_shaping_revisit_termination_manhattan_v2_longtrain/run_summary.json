@@ -1,0 +1,20 @@
+{
+  "maze_path": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_00.npy",
+  "termination": "episode ends on goal or revisiting any previously visited state in the same episode",
+  "potential_distance": "manhattan",
+  "episodes": 5000,
+  "runs": 12,
+  "alpha": 0.02,
+  "epsilon": 0.1,
+  "gamma": 0.99,
+  "step_reward": 0.0,
+  "goal_reward": 1.0,
+  "validation_interval": 25,
+  "validation_episodes": 30,
+  "outputs": {
+    "learning_curve_csv": "learning_curve.csv",
+    "learning_curve_png": "learning_curve.png",
+    "validation_csv": "validation_progress.csv",
+    "validation_png": "validation_progress.png"
+  }
+}

@@ -1,0 +1,62 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report: Manhattan PBRS with Revisit-Termination (v3 Very-Long)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Setup}
+This run keeps the revisit-termination rule and further increases the training budget to 20000 episodes.
+
+Core settings:
+\begin{itemize}
+\item Termination: goal reached or revisit of any previously visited state in same episode
+\item Potential: Manhattan PBRS
+\item Discount: $\gamma=0.99$
+\item Rewards: step $=0.0$, goal $=1.0$
+\item Episodes: 20000, Runs: 12
+\item Validation: every 25 episodes (plus episode 1), 30 rollouts
+\end{itemize}
+
+\section{Curves}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{../../outputs/maze_shaping_revisit_termination_manhattan_v3_verylong/learning_curve.png}
+\caption{Training curve (steps to termination).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_revisit_termination_manhattan_v3_verylong/validation_progress.png}
+\caption{Validation success rate and validation average steps to termination.}
+\end{figure}
+
+\section{Final Metrics (Episode 20000)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Condition & Train mean steps & Validation success rate & Validation mean steps \\
+\midrule
+\texttt{no\_shaping} & 1.666667 & 0.0 & 1.000000 \\
+\texttt{phi\_half} & 8.666667 & 0.0 & 19.000000 \\
+\texttt{phi\_full} & 6.083333 & 0.0 & 12.583333 \\
+\bottomrule
+\end{tabular}
+\caption{Episode-20000 summary under revisit-termination rule.}
+\end{table}
+
+\section{Interpretation}
+Even with 20000 episodes, all conditions remain at zero validation success. PBRS conditions increase steps-to-termination but do not convert that into goal-reaching behavior.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output root: \texttt{../../outputs/maze\_shaping\_revisit\_termination\_manhattan\_v3\_verylong}
+\item Files: \texttt{learning\_curve.csv/png}, \texttt{validation\_progress.csv/png}, \texttt{run\_summary.json}
+\end{itemize}
+
+\end{document}

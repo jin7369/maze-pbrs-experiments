@@ -1,0 +1,242 @@
+[
+  {
+    "maze_id": "maze_00",
+    "seed": 0,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 44,
+    "dead_end_count": 13,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_00.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_00.npy"
+  },
+  {
+    "maze_id": "maze_01",
+    "seed": 1,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 112,
+    "dead_end_count": 12,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_01.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_01.npy"
+  },
+  {
+    "maze_id": "maze_02",
+    "seed": 2,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 36,
+    "dead_end_count": 11,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_02.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_02.npy"
+  },
+  {
+    "maze_id": "maze_03",
+    "seed": 3,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 120,
+    "dead_end_count": 12,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_03.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_03.npy"
+  },
+  {
+    "maze_id": "maze_04",
+    "seed": 4,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 80,
+    "dead_end_count": 11,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_04.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_04.npy"
+  },
+  {
+    "maze_id": "maze_05",
+    "seed": 5,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 72,
+    "dead_end_count": 13,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_05.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_05.npy"
+  },
+  {
+    "maze_id": "maze_06",
+    "seed": 6,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 60,
+    "dead_end_count": 12,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_06.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_06.npy"
+  },
+  {
+    "maze_id": "maze_07",
+    "seed": 7,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 48,
+    "dead_end_count": 10,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_07.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_07.npy"
+  },
+  {
+    "maze_id": "maze_08",
+    "seed": 8,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 48,
+    "dead_end_count": 14,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_08.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_08.npy"
+  },
+  {
+    "maze_id": "maze_09",
+    "seed": 9,
+    "cells_h": 10,
+    "cells_w": 10,
+    "grid_h": 21,
+    "grid_w": 21,
+    "start": [
+      1,
+      1
+    ],
+    "goal": [
+      19,
+      19
+    ],
+    "wall_count": 242,
+    "open_count": 199,
+    "wall_ratio": 0.5487528344671202,
+    "open_ratio": 0.4512471655328798,
+    "shortest_path_len": 92,
+    "dead_end_count": 12,
+    "image_path": "신규_실험_workspace/outputs/maze_samples_v1/images/maze_09.png",
+    "grid_npy": "신규_실험_workspace/outputs/maze_samples_v1/grids/maze_09.npy"
+  }
+]

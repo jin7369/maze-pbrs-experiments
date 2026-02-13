@@ -1,0 +1,74 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report: Manhattan PBRS + Exploration Bonus (v1)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Experiment Setup}
+This run extends Manhattan PBRS by adding an exploration bonus for first-time state visits within each episode.
+
+\textbf{Reward used in training:}
+\[
+r_t = r_{\text{env}}(s_t,a_t,s_{t+1}) + \gamma\Phi_\kappa(s_{t+1}) - \Phi_\kappa(s_t) + r_{\text{explore}}(s_{t+1}),
+\]
+where
+\[
+\Phi(s)=-(|r-r_g|+|c-c_g|),\quad \Phi_\kappa(s)=\kappa\Phi(s),\ \kappa\in\{0,0.5,1.0\},
+\]
+and
+\[
+r_{\text{explore}}(s_{t+1})=
+\begin{cases}
+0.05,& \text{if }s_{t+1}\text{ is first-visit in current episode}\\
+0,& \text{otherwise.}
+\end{cases}
+\]
+
+\textbf{Hyperparameters:}
+$\gamma=0.99$, $\alpha=0.02$, $\epsilon=0.10$, step reward $=0.0$, goal reward $=1.0$, episodes $=500$, runs $=12$, max steps $=350$.
+
+\section{Learning and Validation Curves}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{../../outputs/maze_shaping_icml_style_pbrs_manhattan_explore_v1/learning_curve.png}
+\caption{Training curve (mean steps to goal).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_icml_style_pbrs_manhattan_explore_v1/validation_progress.png}
+\caption{Validation success and validation average steps.}
+\end{figure}
+
+\section{Final Summary (Episode 500)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Condition & Validation success rate & Validation mean steps \\
+\midrule
+\texttt{no\_shaping} & 0.0 & 350.0 \\
+\texttt{phi\_half} & 0.0 & 350.0 \\
+\texttt{phi\_full} & 0.0 & 350.0 \\
+\bottomrule
+\end{tabular}
+\caption{All conditions remained unsuccessful at this budget.}
+\end{table}
+
+\section{Interpretation}
+Under this configuration, adding per-episode first-visit exploration bonus ($0.05$) did not recover successful greedy policies. This is recorded as a negative result for the current reward shaping design and parameter scale.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output folder: \texttt{../../outputs/maze\_shaping\_icml\_style\_pbrs\_manhattan\_explore\_v1}
+\item CSVs: \texttt{learning\_curve.csv}, \texttt{validation\_progress.csv}
+\item Config dump: \texttt{run\_summary.json}
+\item GIF rollouts: \texttt{gifs/policy\_rollout\_ep\_*.gif}
+\end{itemize}
+
+\end{document}

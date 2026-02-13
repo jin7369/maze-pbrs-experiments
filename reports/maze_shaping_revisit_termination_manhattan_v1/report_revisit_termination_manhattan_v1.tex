@@ -1,0 +1,65 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report: Manhattan PBRS with Revisit-Termination (v1)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Setup}
+This experiment changes the episode termination rule: an episode ends when either (i) the agent reaches goal, or (ii) the agent revisits any previously visited state in the same episode.
+
+Core settings:
+\begin{itemize}
+\item Potential: Manhattan PBRS
+\item Discount: $\gamma=0.99$
+\item Rewards: step $=0.0$, goal $=1.0$
+\item Episodes: 500, Runs: 12
+\item Validation: every 25 episodes (plus episode 1), 30 rollouts
+\end{itemize}
+
+\section{Curves}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{../../outputs/maze_shaping_revisit_termination_manhattan_v1/learning_curve.png}
+\caption{Training curve (steps to termination).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_revisit_termination_manhattan_v1/validation_progress.png}
+\caption{Validation success rate and validation average steps to termination.}
+\end{figure}
+
+\section{Final Metrics (Episode 500)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Condition & Train mean steps & Validation success rate & Validation mean steps \\
+\midrule
+\texttt{no\_shaping} & 2.500000 & 0.0 & 1.000000 \\
+\texttt{phi\_half} & 2.666667 & 0.0 & 2.666667 \\
+\texttt{phi\_full} & 2.333333 & 0.0 & 2.416667 \\
+\bottomrule
+\end{tabular}
+\caption{Episode-500 summary under revisit-termination rule.}
+\end{table}
+
+\section{Interpretation}
+Under revisit-termination, episodes collapse to very short trajectories (roughly 1--3 steps), and no condition achieves goal-reaching validation success.
+
+\section{Failure Cause Assessment}
+Our current assessment is that insufficient training iterations may contribute, but is unlikely to be the sole cause. The dominant issue appears to be the termination rule itself: ending an episode immediately on revisiting any previously visited state truncates trajectories too early, which prevents meaningful goal-directed credit assignment.  
+Therefore, increasing episodes is still worth testing as a diagnostic step, but failure under this rule may persist even with more training.
+
+\section{Artifacts}
+\begin{itemize}
+\item Output root: \texttt{../../outputs/maze\_shaping\_revisit\_termination\_manhattan\_v1}
+\item Files: \texttt{learning\_curve.csv/png}, \texttt{validation\_progress.csv/png}, \texttt{run\_summary.json}
+\end{itemize}
+
+\end{document}

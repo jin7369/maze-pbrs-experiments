@@ -1,0 +1,64 @@
+﻿\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\title{Maze Shaping Report (No-Slip Setting)}
+\author{}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Setup}
+This report summarizes reruns after removing action slip (deterministic transitions except wall blocking).
+Common settings: SARSA, 500 episodes, 12 runs, $\alpha=0.02$, $\epsilon=0.10$, $\gamma=1.0$, max steps 350, validation every 25 episodes (30 greedy rollouts).
+
+\section{No-Slip Results: BFS Potential}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../../outputs/maze_shaping_icml_style_bfs_noslip_v1/learning_curve.png}
+\caption{BFS potential: training curve (no-slip).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_icml_style_bfs_noslip_v1/validation_progress.png}
+\caption{BFS potential: validation progress (no-slip).}
+\end{figure}
+
+\section{No-Slip Results: Manhattan Potential}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../../outputs/maze_shaping_icml_style_manhattan_noslip_v1/learning_curve.png}
+\caption{Manhattan potential: training curve (no-slip).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{../../outputs/maze_shaping_icml_style_manhattan_noslip_v1/validation_progress.png}
+\caption{Manhattan potential: validation progress (no-slip).}
+\end{figure}
+
+\section{Final Episode Summary (Episode 500)}
+\begin{table}[h]
+\centering
+\begin{tabular}{llccc}
+\toprule
+Potential & Condition & Train mean steps & Validation success & Validation mean steps \\
+\midrule
+BFS & \texttt{no\_shaping} & 342.25 & 0.0 & 350.0 \\
+BFS & \texttt{phi\_half} & 207.33 & 0.0 & 350.0 \\
+BFS & \texttt{phi\_full} & 49.75 & 1.0 & 44.0 \\
+\midrule
+Manhattan & \texttt{no\_shaping} & 342.25 & 0.0 & 350.0 \\
+Manhattan & \texttt{phi\_half} & 248.75 & 0.0 & 350.0 \\
+Manhattan & \texttt{phi\_full} & 153.25 & 0.0 & 350.0 \\
+\bottomrule
+\end{tabular}
+\caption{No-slip rerun results at episode 500.}
+\end{table}
+
+\section{Takeaway}
+Removing slip made the environment easier, and BFS-based \texttt{phi\_full} reached stable success (1.0) with near-shortest validation steps (44). Manhattan-based shaping still improved training steps versus no shaping but did not produce successful greedy validation under this budget.
+
+\end{document}

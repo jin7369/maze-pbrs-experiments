@@ -1,0 +1,11 @@
+maze_id,seed,cells_h,cells_w,grid_h,grid_w,start,goal,wall_count,open_count,wall_ratio,open_ratio,shortest_path_len,dead_end_count,image_path,grid_npy
+maze_00,0,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,44,13,신규_실험_workspace/outputs/maze_samples_v1/images/maze_00.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_00.npy
+maze_01,1,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,112,12,신규_실험_workspace/outputs/maze_samples_v1/images/maze_01.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_01.npy
+maze_02,2,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,36,11,신규_실험_workspace/outputs/maze_samples_v1/images/maze_02.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_02.npy
+maze_03,3,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,120,12,신규_실험_workspace/outputs/maze_samples_v1/images/maze_03.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_03.npy
+maze_04,4,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,80,11,신규_실험_workspace/outputs/maze_samples_v1/images/maze_04.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_04.npy
+maze_05,5,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,72,13,신규_실험_workspace/outputs/maze_samples_v1/images/maze_05.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_05.npy
+maze_06,6,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,60,12,신규_실험_workspace/outputs/maze_samples_v1/images/maze_06.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_06.npy
+maze_07,7,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,48,10,신규_실험_workspace/outputs/maze_samples_v1/images/maze_07.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_07.npy
+maze_08,8,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,48,14,신규_실험_workspace/outputs/maze_samples_v1/images/maze_08.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_08.npy
+maze_09,9,10,10,21,21,"[1, 1]","[19, 19]",242,199,0.5487528344671202,0.4512471655328798,92,12,신규_실험_workspace/outputs/maze_samples_v1/images/maze_09.png,신규_실험_workspace/outputs/maze_samples_v1/grids/maze_09.npy
